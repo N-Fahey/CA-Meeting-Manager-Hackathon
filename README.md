@@ -1,5 +1,19 @@
 # Meeting Scheduler
 
+### Packages
+* Express
+* Mongoose
+* Bcryptjs
+* CORS
+* Helmet
+* jsonwebtoken
+* validator - email
+
+### Dev Packages
+* eslint
+* prettier
+
+
 ### Models
 * Users
 	* FName
