@@ -1,0 +1,26 @@
+{
+	"name": "ca-meeting-manager-hackathon",
+	"version": "1.0.0",
+	"description": "Simple app to create & manage meetings, including inviting other users, accepting/declining invitations, user auth.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node src/server.js",
+		"dev": "node --watch src/server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/N-Fahey/CA-Meeting-Manager-Hackathon.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/N-Fahey/CA-Meeting-Manager-Hackathon/issues"
+	},
+	"homepage": "https://github.com/N-Fahey/CA-Meeting-Manager-Hackathon#readme",
+	"dependencies": {
+		"express": "^5.1.0",
+		"mongoose": "^9.0.0"
+	}
+}
