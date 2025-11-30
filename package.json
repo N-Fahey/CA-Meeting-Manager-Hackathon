@@ -4,10 +4,10 @@
 	"description": "Simple app to create & manage meetings, including inviting other users, accepting/declining invitations, user auth.",
 	"main": "index.js",
 	"scripts": {
-		"start": "node src/server.js",
-		"dev": "node --watch src/server.js",
+		"start": "node --env-file=.env src/server.js",
+		"dev": "node --watch --env-file-if-exists=.env src/server.js",
 		"test": "jest",
-		"test:ci": "jest --ci --reporters=default --coverage",
+		"test:ci": "jest --ci --reporters=default --detectOpenHandles --coverage",
 		"lint": "eslint"
 	},
 	"repository": {

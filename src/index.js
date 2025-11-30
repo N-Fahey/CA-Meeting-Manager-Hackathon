@@ -15,9 +15,18 @@ app.use(
 	})
 );
 
+// Routers
+const authRouter = require('./routes/auth');
+app.use('/api/v1/auth', authRouter);
+
 // Root Route
 app.get('/', (req, res) => {
 	res.json({ status: 'Ok' });
 });
+
+// Error Handling
+const { errorHandler, unknownRouteHandler } = require('./utils/errorHandler');
+app.use(unknownRouteHandler);
+app.use(errorHandler);
 
 module.exports = { app };

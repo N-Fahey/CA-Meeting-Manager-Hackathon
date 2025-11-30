@@ -33,7 +33,8 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre('save', async function () {
-    //Only hash if new / changed password
+    // Only hash if new / changed password
+    // Note: update user routes not implemented, so this should not be required
     if (!this.isModified('password')) return;
 
     this.password = await bcrypt.hash(this.password, 10);
