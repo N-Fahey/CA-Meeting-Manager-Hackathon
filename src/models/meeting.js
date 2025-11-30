@@ -58,4 +58,6 @@ const meetingSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
+// TODO: add normalisation
+
 module.exports = mongoose.model('Meeting', meetingSchema);
