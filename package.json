@@ -24,6 +24,7 @@
 	"homepage": "https://github.com/N-Fahey/CA-Meeting-Manager-Hackathon#readme",
 	"dependencies": {
 		"bcryptjs": "^3.0.3",
+		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"express": "^5.1.0",
 		"helmet": "^8.1.0",

@@ -8,18 +8,18 @@ const registerController = async (req, res) => {
 			throw new Error(
 				'JSON body required containing: firstName, lastName, email, password'
 			);
-        
+
 		const { firstName, lastName, email, password } = req.body;
 		const user = new User({ firstName, lastName, email, password });
 		await user.save();
 		res.status(201).json({
 			message: 'New user registered',
-            firstName: user.firstName,
-            lastName: user.lastName,
+			firstName: user.firstName,
+			lastName: user.lastName,
 			email: user.email,
 		});
 	} catch (err) {
-        err.status = 400;
+		err.status = 400;
 		throw err;
 	}
 };
@@ -43,14 +43,24 @@ const loginController = async (req, res) => {
 	}
 
 	const token = jwt.sign(
-		{ userId: user._id },
+		{
+			id: user._id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+		},
 		process.env.JWT_KEY,
-		{ expiresIn: '1h' }
+		{
+			expiresIn: '1h',
+		}
 	);
 
+	res.cookie('token', token, {
+		httpOnly: true,
+		sameSite: 'strict',
+		maxAge: 60 * 60 * 1000, // 1 hour, matches token expiry
+	});
 	res.json({
-		message: 'Login Ok',
-		token: token,
+		message: 'Login ok',
 	});
 };
 
