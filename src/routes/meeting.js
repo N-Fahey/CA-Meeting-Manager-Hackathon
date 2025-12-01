@@ -1,25 +1,25 @@
 const express = require('express');
-//TODO: import controllers
-//const { registerController, loginController } = require('../controllers/auth')
+const { createMeetingController, inviteToMeetingController, respondController } = require('../controllers/meeting');
+const { authMiddleware } = require('../controllers/middleware');
 
 const router = express.Router();
 
-// TODO: Define auth middleware here
-// router.use(middlewareName)
+// All meeting endpoints require authorization
+router.use(authMiddleware)
 
-// TODO:
-router.post('/create', );
+// Create meeting route
+router.post('/create', createMeetingController);
 
-// TODO:
-router.post('/invite', );
+// Invite attendees route
+router.post('/invite', inviteToMeetingController);
+
+// Respond to meeting route 
+router.post('/respond', respondController);
 
 // TODO: 
-router.post('/respond', );
-
-// TODO: 
-router.patch('/update', );
+// router.patch('/update', );
 
 // TODO:
-router.delete('/delete', )
+// router.delete('/delete', )
 
 module.exports = router;
