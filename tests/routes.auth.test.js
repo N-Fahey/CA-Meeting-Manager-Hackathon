@@ -121,7 +121,7 @@ describe('GET /login', () => {
 			})
 			.expect(401);
 		
-		expect(response.message).toBe('An error occured')
-		expect(response.error).toBe('Email or password is invalid')
+		expect(response.body.message).toBe('An error occured')
+		expect(response.body.error).toBe('Email or password is invalid')
 	});
 });

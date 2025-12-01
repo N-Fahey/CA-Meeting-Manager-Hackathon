@@ -50,7 +50,8 @@ const meetingSchema = mongoose.Schema(
 				},
 				status: {
 					type: String,
-					enum: ['accepted', 'declined', 'tentative'],
+					enum: ['invited', 'accepted', 'declined', 'tentative'],
+					default: 'invited'
 				},
 			},
 		],
