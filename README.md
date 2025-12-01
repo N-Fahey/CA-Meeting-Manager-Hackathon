@@ -1,4 +1,5 @@
 # Meeting Scheduler
+A lightweight API to create & manage meeting requests
 
 ### Packages
 * Express
@@ -7,26 +8,14 @@
 * CORS
 * Helmet
 * jsonwebtoken
-* validator - email
+* validator
+* cookie-parser
 
 ### Dev Packages
 * eslint
 * prettier
-
-
-### Models
-* Users
-	* FName
-	* LName
-	* Email
-	* PWD
-* Meetings
-	* Start time
-	* End time
-	* Title
-	* Description
-	* Host (User)
-	* Attendees({User: _id, status: accepted/declined})
+* jest
+* supertest
 
 ### Endpoints
 * Auth
@@ -38,4 +27,3 @@
 	* Respond (invitee can respond to a meeting, accept/decline)
 	* Update (change meeting name, description)
 	* Cancel
-	
