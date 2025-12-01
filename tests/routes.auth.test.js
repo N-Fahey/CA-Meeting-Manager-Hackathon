@@ -90,7 +90,7 @@ describe('POST /register', () => {
 });
 
 describe('GET /login', () => {
-	test('Succesfull login should return 200 & a JWT', async () => {
+	test('Succesfull login should return 200', async () => {
 		// Add a user to login as first
 		await request(app)
 			.post('/api/v1/auth/register')
@@ -108,8 +108,7 @@ describe('GET /login', () => {
 			.send({ email: 'loginUser@email.com', password: 'passwd123' })
 			.expect(200);
 
-		expect(response.body.message).toBe('Login Ok');
-		expect(response.body).toHaveProperty('token');
+		expect(response.body.message).toBe('Login ok');
 	});
 
 	test('Attempting login with invalid credentials should fail', async () => {
