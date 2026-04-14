@@ -9,3 +9,7 @@ output "ecr_repo_arn" {
 output "ecr_repo_url" {
   value = module.resources.ecr_repo_url
 }
+
+output "ecs_cluster_arn" {
+  value = module.resources.ecs_cluster_arn
+}

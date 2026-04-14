@@ -3,10 +3,10 @@ resource "random_id" "bucket_suffix" {
 }
 
 resource "aws_s3_bucket" "log_bucket" {
-  bucket = "${var.aws_log_bucket_name}-${random_id.bucket_suffix.hex}"
+  bucket = "${var.project_name}-log-bucket-${random_id.bucket_suffix.hex}"
 
   tags = {
-    Name        = var.aws_log_bucket_name
+    Name        = var.project_name
     Environment = "Dev"
     ManagedBy   = "Terraform"
   }

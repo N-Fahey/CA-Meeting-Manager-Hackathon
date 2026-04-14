@@ -20,7 +20,6 @@ provider "aws" {
 }
 
 module "resources" {
-  source              = "./resources"
-  aws_log_bucket_name = var.aws_log_bucket_name
-  aws_ecr_repo_name   = var.aws_ecr_repo_name
+  source       = "./resources"
+  project_name = var.project_name
 }

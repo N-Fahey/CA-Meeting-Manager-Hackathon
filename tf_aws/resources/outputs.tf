@@ -9,3 +9,7 @@ output "ecr_repo_arn" {
 output "ecr_repo_url" {
   value = aws_ecr_repository.app_ecr_repo.repository_url
 }
+
+output "ecs_cluster_arn" {
+  value = aws_ecs_cluster.ecs_cluster.arn
+}
