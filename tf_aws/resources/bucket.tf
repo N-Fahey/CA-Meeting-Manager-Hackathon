@@ -6,9 +6,8 @@ resource "aws_s3_bucket" "log_bucket" {
   bucket = "${var.project_name}-log-bucket-${random_id.bucket_suffix.hex}"
 
   tags = {
-    Name        = var.project_name
-    Environment = "Dev"
-    ManagedBy   = "Terraform"
+    Name      = var.project_name
+    ManagedBy = "Terraform"
   }
 }
 
