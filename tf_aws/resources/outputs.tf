@@ -13,3 +13,11 @@ output "ecr_repo_url" {
 output "ecs_cluster_arn" {
   value = aws_ecs_cluster.ecs_cluster.arn
 }
+
+output "sm_mongo_uri_secret_arn" {
+  value = aws_secretsmanager_secret.sm_mongo_uri.arn
+}
+
+output "sm_jwt_secret_arn" {
+  value = aws_secretsmanager_secret.sm_jwt_secret.arn
+}
