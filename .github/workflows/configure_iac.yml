@@ -16,6 +16,9 @@ jobs:
         defaults:
             run:
                 working-directory: ./tf_aws/
+        env:
+            TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+            TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
 
         steps:
             - name: HashiCorp - Setup Terraform
