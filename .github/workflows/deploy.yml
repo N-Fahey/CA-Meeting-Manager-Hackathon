@@ -3,21 +3,21 @@ name: Deploy Production Environment
 on:
     workflow_dispatch:
 
-env:
-    AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-    AWS_REGION: ${{ vars.AWS_REGION }}
-
 permissions:
     id-token: write
 jobs:
-    run_job_with_aws:
+    deploy_to_ecr:
         runs-on: ubuntu-latest
+        environment:
+            name: Production
+            deployment: false
+
         steps:
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v6.1.0
               with:
-                  role-to-assume: ${{ env.AWS_ROLE_ARN }}
-                  aws-region: ${{ env.AWS_REGION }}
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: ${{ vars.AWS_REGION }}
             - name: Verify AWS Login
               run: |
                   aws sts get-caller-identity
