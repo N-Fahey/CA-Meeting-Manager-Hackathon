@@ -25,7 +25,11 @@ app.use('/api/v1/meeting', meetingRouter);
 
 // Root Route
 app.get('/', (req, res) => {
-	res.json({ status: 'Ok' });
+	res.json({
+		message: 'Welcome to Meeting Manager',
+		status: 'Ok',
+		version: '1.0.0',
+	});
 });
 
 // Error Handling
