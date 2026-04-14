@@ -1,4 +1,4 @@
-name: Configure AWS Services
+name: Destroy AWS Services
 
 on:
     workflow_dispatch:
