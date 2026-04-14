@@ -7,6 +7,8 @@ const User = require('../src/models/user');
 const Meeting = require('../src/models/meeting');
 
 let insertedUsers = [];
+let tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 beforeAll(async () => {
 	// Inject testing JWT key for auth tests
@@ -61,10 +63,15 @@ afterAll(async () => {
 
 describe('POST /create', () => {
 	test('Creating a new meeting should respond 201', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(15, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(15, 30, 0, 0);
+
 		const testMeetingData = {
 			title: 'This is a test created meeting',
-			startTime: '2026-02-15T15:00:00+11:00',
-			endTime: '2026-02-15T15:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			description: 'I am the meeting description',
 			attendees: [
 				{ user: insertedUsers[1]._id },
@@ -85,9 +92,14 @@ describe('POST /create', () => {
 	});
 
 	test('Fail to create meeting with missing title', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(15, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(15, 30, 0, 0);
+
 		const badMeetingData = {
-			startTime: '2026-02-15T15:00:00+11:00',
-			endTime: '2026-02-15T15:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			description: 'Missing title',
 			attendees: [{ user: insertedUsers[1]._id }],
 		};
@@ -100,10 +112,15 @@ describe('POST /create', () => {
 	});
 
 	test('Fail to create meeting with invalid time range', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(16, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(15, 30, 0, 0);
+
 		const badMeetingData = {
 			title: 'Invalid time meeting',
-			startTime: '2026-02-15T16:00:00+11:00',
-			endTime: '2026-02-15T15:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			description: 'End time before start time',
 			attendees: [{ user: insertedUsers[1]._id }],
 		};
@@ -120,11 +137,16 @@ describe('POST /create', () => {
 
 describe('POST /invite', () => {
 	test('Inviting a new user correctly appends them to invitees', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(16, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(16, 15, 0, 0);
+
 		// Create a meeting to test on
 		const testMeetingData = {
 			title: 'Testing Meeting Invitations',
-			startTime: '2026-02-15T16:00:00+11:00',
-			endTime: '2026-02-15T16:15:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			attendees: [{ user: insertedUsers[1]._id }],
 		};
 
@@ -154,11 +176,16 @@ describe('POST /invite', () => {
 	});
 
 	test('Inviting an already invited user returns 400 error', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(17, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(17, 30, 0, 0);
+
 		// Create a meeting and invite 2nd user
 		const testMeetingData = {
 			title: 'Duplicate Invite Test',
-			startTime: '2026-02-15T17:00:00+11:00',
-			endTime: '2026-02-15T17:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			attendees: [{ user: insertedUsers[1]._id }],
 		};
 		const createResponse = await request(app)
@@ -183,10 +210,15 @@ describe('POST /invite', () => {
 	});
 
 	test('Inviting users to a meeting not hosted by the user returns an error', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(12, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(12, 30, 0, 0);
+
 		const anotherUsersMeeting = new Meeting({
 			title: 'Someone Elses Meeting',
-			startTime: '2026-02-15T12:00:00+11:00',
-			endTime: '2026-02-15T12:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			host: insertedUsers[1]._id,
 			attendees: [{ user: insertedUsers[0]._id }],
 		});
@@ -211,11 +243,16 @@ describe('POST /invite', () => {
 
 describe('POST /respond', () => {
 	test('Responding to invite correctly updates that users status', async () => {
+		const startTime = new Date(tomorrow);
+		startTime.setHours(18, 0, 0, 0);
+		const endTime = new Date(tomorrow);
+		endTime.setHours(18, 30, 0, 0);
+
 		// Create a meeting and invite 2nd user
 		const testMeetingData = {
 			title: 'Respond test meeting',
-			startTime: '2026-02-15T18:00:00+11:00',
-			endTime: '2026-02-15T18:30:00+11:00',
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
 			host: insertedUsers[1]._id,
 			attendees: [{ user: insertedUsers[0]._id }],
 		};
