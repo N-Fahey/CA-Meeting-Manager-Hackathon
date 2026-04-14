@@ -8,7 +8,7 @@ permissions:
     contents: read
 
 jobs:
-    deploy_to_ecr:
+    validate_services:
         runs-on: ubuntu-latest
         environment:
             name: Production
@@ -32,7 +32,7 @@ jobs:
 
             - name: Initialise Terraform
               id: init
-              run: terraform init -backend-config="bucket=${{ vars.BUCKET_TF_STATE }}" -backend-config="key=${{ vars.BUCKET_TF_KEY }}" -backend-config="${{ vars.AWS_REGION }}"
+              run: terraform init -backend-config="bucket=${{ vars.BUCKET_TF_STATE }}" -backend-config="key=${{ vars.BUCKET_TF_KEY }}" -backend-config="region=${{ vars.AWS_REGION }}"
 
             - name: Terraform Format
               run: terraform fmt -check
