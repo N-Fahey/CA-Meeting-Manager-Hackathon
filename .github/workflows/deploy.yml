@@ -58,3 +58,15 @@ jobs:
               with:
                   role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
                   aws-region: ${{ vars.AWS_REGION }}
+
+            - name: Download Task Definition
+              run: |
+                aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition > task-definition.json
+            
+            - name: Deploy ECS Service
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v2.6.1
+              with:
+                task-definition: task-definition.json
+                service: ${{ vars.PROJECT_NAME }}-service
+                cluster: ${{ vars.PROJECT_NAME }}-cluster
+                wait-for-service-stability: true
