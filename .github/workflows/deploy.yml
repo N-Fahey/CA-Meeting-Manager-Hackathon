@@ -42,8 +42,8 @@ jobs:
                   context: .
                   push: true
                   tags: |
-                      $REGISTRY/$REPOSITORY:latest
-                      $REGISTRY/$REPOSITORY:$IMAGE_TAG
+                      ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
+                      ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
 
     redeploy_ecs:
         runs-on: ubuntu-latest
