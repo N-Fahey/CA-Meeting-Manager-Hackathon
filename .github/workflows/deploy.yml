@@ -8,7 +8,7 @@ permissions:
     contents: read
 
 jobs:
-    deploy_to_ecr:
+    build_and_push:
         runs-on: ubuntu-latest
         environment:
             name: Production
@@ -33,10 +33,28 @@ jobs:
               uses: aws-actions/amazon-ecr-login@v2
 
             - name: Build and Push Docker Image
+              uses: docker/build-push-action@v7.1.0
               env:
                   REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                   REPOSITORY: ${{ vars.PROJECT_NAME }}-app-repo
                   IMAGE_TAG: ${{ github.sha }}
-              run: |
-                  docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-                  docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+              with:
+                  context: .
+                  push: true
+                  tags: |
+                      $REGISTRY/$REPOSITORY:latest
+                      $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+    redeploy_ecs:
+        runs-on: ubuntu-latest
+        environment:
+            name: Production
+            deployment: false
+        needs: build_and_push
+
+        steps:
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.1.0
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: ${{ vars.AWS_REGION }}
