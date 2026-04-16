@@ -10,7 +10,7 @@ jobs:
     run_tests:
         runs-on: ubuntu-latest
         environment:
-            name: Production
+            name: Testing
             deployment: false
         
         steps:
