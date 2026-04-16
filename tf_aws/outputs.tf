@@ -2,6 +2,10 @@ output "log_bucket_arn" {
   value = module.resources.log_bucket_arn
 }
 
+output "log_bucket_uri" {
+  value = module.resources.log_bucket_uri
+}
+
 output "ecr_repo_arn" {
   value = module.resources.ecr_repo_arn
 }

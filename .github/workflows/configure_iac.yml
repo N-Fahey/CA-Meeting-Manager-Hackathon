@@ -45,3 +45,7 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve
+            
+            - name: Terraform Output
+              id: output
+              run: terraform output -no-color log_bucket_uri

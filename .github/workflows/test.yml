@@ -60,5 +60,3 @@ jobs:
               with:
                   name: Test Result
 
-            - name: Display structure of downloaded files
-              run: ls -R
