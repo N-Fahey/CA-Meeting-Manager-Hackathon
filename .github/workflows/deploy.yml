@@ -81,10 +81,10 @@ jobs:
                   container-port: ${{ vars.APP_PORT }}
                   environment-variables: |
                       [
-                          {"name": "PORT", "value": ${{vars.APP_PORT}}},
-                          {"name": "HOST", "value": ${{vars.APP_HOST}}},
-                          {"name": "MONGO_URI", "value": ${{secrets.APP_MONGO_URI}}},
-                          {"name": "JWT_KEY", "value": ${{secrets.APP_JWT_KEY}}}
+                          {"name": "PORT", "value": "${{vars.APP_PORT}}"},
+                          {"name": "HOST", "value": "${{vars.APP_HOST}}"},
+                          {"name": "MONGO_URI", "value": "${{secrets.APP_MONGO_URI}}"},
+                          {"name": "JWT_KEY", "value": "${{secrets.APP_JWT_KEY}}"}
                       ]
 
                   # Resources
