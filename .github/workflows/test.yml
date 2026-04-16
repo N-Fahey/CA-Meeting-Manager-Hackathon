@@ -75,6 +75,9 @@ jobs:
               uses: actions/download-artifact@v8.0.1
               with:
                   name: Test Result
+            
+            - name: Do a ls
+              run: ls -A
 
             - name: Upload Test Report to S3
-              run: aws s3 cp testreport.json "$BUCKET_LOG_URI"
+              run: aws s3 cp /testreport.json "$BUCKET_LOG_URI"
