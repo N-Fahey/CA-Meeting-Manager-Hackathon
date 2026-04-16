@@ -45,7 +45,6 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve
-            
-            - name: Terraform Output
-              id: output
-              run: terraform output -no-color log_bucket_uri
+
+            - name: Terraform Output to Env
+              run: echo "BUCKET_LOG_URI=$(terraform output -raw log_bucket_uri)" >> $GITHUB_ENV
