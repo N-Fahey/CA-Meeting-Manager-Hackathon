@@ -3,14 +3,16 @@ const request = require('supertest');
 
 const { app } = require('../src/index');
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
+let mongoMemoryServer;
 
 beforeAll(async () => {
 	// Inject testing JWT key for auth tests
 	process.env.JWT_KEY = 'testingSecretKey';
 	// Setup test db for this file
-	const dbUriTest =
-		(process.env.DB_URI || 'mongodb://127.0.0.1:27017/meeting-manager') +
-		'-test-auth';
+	mongoMemoryServer = await MongoMemoryServer.create();
+	const dbUriTest = mongoMemoryServer.getUri() + '-test-auth';
 
 	await mongoose.connect(dbUriTest);
 });
@@ -19,6 +21,8 @@ afterAll(async () => {
 	// Drop test database & disconnect
 	await mongoose.connection.dropDatabase();
 	await mongoose.disconnect();
+
+	mongoMemoryServer.stop();
 });
 
 describe('POST /register', () => {
@@ -119,8 +123,8 @@ describe('GET /login', () => {
 				password: 'wrong_password',
 			})
 			.expect(401);
-		
-		expect(response.body.message).toBe('An error occured')
-		expect(response.body.error).toBe('Email or password is invalid')
+
+		expect(response.body.message).toBe('An error occured');
+		expect(response.body.error).toBe('Email or password is invalid');
 	});
 });

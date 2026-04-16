@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const request = require('supertest');
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const { app } = require('../src/index');
 const User = require('../src/models/user');
@@ -10,13 +11,14 @@ let insertedUsers = [];
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
 
+let mongoMemoryServer;
+
 beforeAll(async () => {
 	// Inject testing JWT key for auth tests
 	process.env.JWT_KEY = 'testingSecretKey';
 	// Setup test db for this file
-	const dbUriTest =
-		(process.env.DB_URI || 'mongodb://127.0.0.1:27017/meeting-manager') +
-		'-test-meeting';
+	mongoMemoryServer = await MongoMemoryServer.create();
+	const dbUriTest = mongoMemoryServer.getUri() + '-test-auth';
 
 	await mongoose.connect(dbUriTest);
 
@@ -59,6 +61,8 @@ afterAll(async () => {
 	// Drop test database & disconnect
 	await mongoose.connection.dropDatabase();
 	await mongoose.disconnect();
+
+	mongoMemoryServer.stop();
 });
 
 describe('POST /create', () => {
