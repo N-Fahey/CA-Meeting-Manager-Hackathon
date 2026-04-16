@@ -77,4 +77,4 @@ jobs:
                   name: Test Result
 
             - name: Upload Test Report to S3
-              run: aws s3 cp ../testreport.json "$BUCKET_LOG_URI"
+              run: aws s3 cp ../testreport.json "$BUCKET_LOG_URI"/testreport-$(git rev-parse --short HEAD).json
