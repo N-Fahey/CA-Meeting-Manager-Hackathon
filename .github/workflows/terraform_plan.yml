@@ -59,22 +59,22 @@ jobs:
                       #### Terraform Validate: \`${{ steps.validate.outcome }}\`
                       #### Terraform Plan: \`${{ steps.plan.outcome }}\`
 
-                      <details><summary>Show Plan Output</summary>
+                        <details><summary>Show Plan Output</summary>
 
-                      ```
-                      ${{ steps.plan.outputs.stdout }}
-                      ```
+                        ```
+                        ${{ steps.plan.outputs.stdout }}
+                        ```
 
-                      </details>
+                        </details>
 
-                      *Triggered by @${{ github.actor }}, commit: ${{ github.sha }}*`;
+                        *Triggered by @${{ github.actor }}, commit: ${{ github.sha }}*`;
 
-                      github.rest.issues.createComment({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      body: output
-                      });
+                        github.rest.issues.createComment({
+                          issue_number: context.issue.number,
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          body: output
+                        });
 
             - name: Fail on Plan Error
               if: steps.plan.outcome == 'failure'
