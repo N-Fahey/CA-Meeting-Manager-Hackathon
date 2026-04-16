@@ -47,16 +47,34 @@ jobs:
         environment:
             name: Production
             deployment: false
+        defaults:
+            run:
+                working-directory: ./tf_aws/
 
         steps:
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v6.1.0
-              with:
-                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-                  aws-region: ${{ vars.AWS_REGION }}
+            - name: HashiCorp - Setup Terraform
+              uses: hashicorp/setup-terraform@v4.0.0
+
+            - name: Checkout
+              uses: actions/checkout@v6.0.2
+
+            - name: Initialise Terraform
+              id: init
+              run: terraform init -backend-config="bucket=${{ vars.BUCKET_TF_STATE }}" -backend-config="key=${{ vars.BUCKET_TF_KEY }}" -backend-config="region=${{ vars.AWS_REGION }}"
+
+            - name: Terraform Output to Env
+              run: echo "BUCKET_LOG_URI=$(terraform output -raw log_bucket_uri)" >> $GITHUB_ENV
 
             - name: Download a Build Artifact
               uses: actions/download-artifact@v8.0.1
               with:
                   name: Test Result
 
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.1.0
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: ${{ vars.AWS_REGION }}
+
+            - name: Upload Test Report to S3
+              run: aws s3 cp testreport.json "$BUCKET_LOG_URI"
