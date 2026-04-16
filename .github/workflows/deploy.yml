@@ -13,6 +13,8 @@ jobs:
         environment:
             name: Production
             deployment: false
+        outputs:
+            image_tag: ${{ steps.output.outputs.tag }}
 
         steps:
             - name: Configure AWS Credentials
@@ -42,8 +44,12 @@ jobs:
                   context: .
                   push: true
                   tags: |
-                      ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
-                      ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+                      ${{ steps.login-ecr.outputs.registry }}/${{ vars.PROJECT_NAME }}-app-repo:latest
+                      ${{ steps.login-ecr.outputs.registry }}/${{ vars.PROJECT_NAME }}-app-repo:${{ github.sha }}
+
+            - name: Output Image Tag
+              id: output
+              run: echo "tag=${{ steps.login-ecr.outputs.registry }}/${{ vars.PROJECT_NAME }}-app-repo:${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
     redeploy_ecs:
         runs-on: ubuntu-latest
@@ -63,10 +69,28 @@ jobs:
               run: |
                   aws ecs describe-task-definition --task-definition ${{ vars.PROJECT_NAME }}-td-family --query taskDefinition > task-definition.json
 
-            - name: Deploy ECS Service
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v2.6.1
+            - name: Redeploy ECS Express Service
+              uses: aws-actions/amazon-ecs-deploy-express-service@v1.2.0
               with:
-                  task-definition: task-definition.json
-                  service: ${{ vars.PROJECT_NAME }}-service
-                  cluster: ${{ vars.PROJECT_NAME }}-cluster
-                  wait-for-service-stability: true
+                  service-name: ${{ vars.PROJECT_NAME }}
+                  image: ${{ needs.build_and_push.outputs.image_tag }}
+                  execution-role-arn: ${{ secrets.AWS_ECS_EXECUTION_ROLE_ARN }}
+                  infrastructure-role-arn: ${{ secrets.AWS_ECS_INFRASTRUCTURE_ROLE_ARN }}
+
+                  # Container configuration
+                  container-port: ${{ vars.APP_PORT }}
+                  environment-variables: |
+                      [
+                          {"name": "PORT", "value": ${{vars.APP_PORT}}},
+                          {"name": "HOST", "value": ${{vars.APP_HOST}}},
+                          {"name": "MONGO_URI", "value": ${{secrets.APP_MONGO_URI}}},
+                          {"name": "JWT_KEY", "value": ${{secrets.APP_JWT_KEY}}}
+                      ]
+
+                  # Resources
+                  cpu: '256'
+                  memory: '512'
+
+                  # Scaling
+                  min-task-count: 1
+                  max-task-count: 1
