@@ -9,6 +9,7 @@ on:
 permissions:
     id-token: write
     contents: read
+    deployments: write
 
 jobs:
     build_and_push:
@@ -58,7 +59,7 @@ jobs:
         runs-on: ubuntu-latest
         environment:
             name: Production
-            deployment: false
+            url: ${{ steps.ecs_deploy.outputs.endpoint }}
         needs: build_and_push
 
         steps:
@@ -69,6 +70,7 @@ jobs:
                   aws-region: ${{ vars.AWS_REGION }}
 
             - name: Redeploy ECS Express Service
+              id: ecs_deploy
               uses: aws-actions/amazon-ecs-deploy-express-service@v1.2.0
               with:
                   service-name: ${{ vars.PROJECT_NAME }}
