@@ -65,10 +65,6 @@ jobs:
                   role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
                   aws-region: ${{ vars.AWS_REGION }}
 
-            - name: Download Task Definition
-              run: |
-                  aws ecs describe-task-definition --task-definition ${{ vars.PROJECT_NAME }}-td-family --query taskDefinition > task-definition.json
-
             - name: Redeploy ECS Express Service
               uses: aws-actions/amazon-ecs-deploy-express-service@v1.2.0
               with:
