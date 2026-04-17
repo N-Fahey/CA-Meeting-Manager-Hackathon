@@ -5,6 +5,7 @@ on:
         workflows: ['Terraform Apply']
         types: [completed]
         branches: [main]
+    workflow_dispatch:
 
 permissions:
     id-token: write
